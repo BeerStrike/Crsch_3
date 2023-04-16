@@ -14,7 +14,7 @@ namespace GloryToHoChiMin {
         public event Logs Log;
         public HttpServer(int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
           srv= new HttpListener();
-          srv.Prefixes.Add("http://127.0.0.1:"+port.ToString()+"/");
+          srv.Prefixes.Add("http://*:" + port.ToString()+"/");
           db=new DatabaseConnector(dbadr, dbport, dbnme, dblogin, dbpass);
             db.ErrorLog += DbLogReciver;
         }
@@ -93,7 +93,11 @@ namespace GloryToHoChiMin {
                         }
                         break;
                         case "GET": {
-
+                            using (Stream output = ctxt.Response.OutputStream) {
+                                output.Write((Encoding.UTF8.GetBytes("2323")));
+                                output.Flush();
+                                ctxt.Response.Close();
+                            }
                         } break;
                         default:
                             Log("Ошибка: полученный запрос имеет неправильный HTTP метод");
