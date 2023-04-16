@@ -8,7 +8,7 @@ namespace GloryToHoChiMin {
             Console.WriteLine(s);
         }
         static void Main(string[] args) {
-            HttpServer srv = new HttpServer(80, "195.19.114.66", 3306, "Che", "root", "VivaLaRevolution");
+            HttpServer srv = new HttpServer(888, "195.19.114.66", 3306, "Che", "root", "VivaLaRevolution");
             srv.Log += Logger;
             if (srv.Start()) {
                 Console.WriteLine("Сервер запущен");
