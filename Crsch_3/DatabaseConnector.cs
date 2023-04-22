@@ -29,7 +29,7 @@ namespace GloryToHoChiMin {
             {
                 command = new MySqlCommand("INSERT INTO Accounts(Login, Password) values('" + Login + "', '" + Password + "');", cnct);
                 command.ExecuteNonQuery();
-                command = new MySqlCommand("CREATE TABLE "+Login+"Contacts (Contact VARCHAR(50),Unrecived INT);", cnct);
+                command = new MySqlCommand("CREATE TABLE "+Login+"Contacts (Contact VARCHAR(50),Unread INT);", cnct);
                 command.ExecuteNonQuery();
                 return true;
             }
@@ -97,12 +97,12 @@ namespace GloryToHoChiMin {
         public DialogsList GetDialogsList(string Login) {
             DialogsList dl = new DialogsList();
             dl.Logins = new List<string>();
-            dl.Unrecived = new List<int>();
+            dl.Unread = new List<int>();
             MySqlCommand command = new MySqlCommand("SELECT * FROM " + Login  +"Contacts;", cnct);
             using (MySqlDataReader r = command.ExecuteReader()) {
                 while (r.Read()) {
                     dl.Logins.Add((string)r.GetValue(0));
-                    dl.Unrecived.Add((int)r.GetValue(1));
+                    dl.Unread.Add((int)r.GetValue(1));
                 }
             }
             return dl;
