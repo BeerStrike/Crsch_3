@@ -15,6 +15,7 @@ namespace GloryToHoChiMin {
                 while (true) {
                     string command = Console.ReadLine();
                     if (command == "stop") {
+                        srv.Log -= Logger;
                         srv.Dispose();
                         break;
                     }
