@@ -49,17 +49,17 @@ namespace GloryToHoChiMin {
                     if (String.Compare(Login1, Login2) > 0) {
                         command = new MySqlCommand("CREATE TABLE Dialog" + Login1 + "And" + Login2 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO "+Login1+ "Contacts (Contact,Unrecived) values('" + Login2 + "',0);", cnct);
+                        command = new MySqlCommand("INSERT INTO "+Login1+ "Contacts (Contact,Unread) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unrecived) values('" + Login1 + "',0);", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unread) values('" + Login1 + "',0);", cnct);
                         command.ExecuteNonQuery();
                     }
                     else {
                         command = new MySqlCommand("CREATE TABLE Dialog" + Login2 + "And" + Login1 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login1 + "Contacts (Contact,Unrecived) values('" + Login2 + "',0);", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login1 + "Contacts (Contact,Unread) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unrecived) values('" + Login1 + "',0);", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unread) values('" + Login1 + "',0);", cnct);
                         command.ExecuteNonQuery();
                     }
                     return true;
