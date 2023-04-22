@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Crsch_3.Jsonstructs;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ namespace GloryToHoChiMin {
             {
                 command = new MySqlCommand("INSERT INTO Accounts(Login, Password) values('" + Login + "', '" + Password + "');", cnct);
                 command.ExecuteNonQuery();
-                command = new MySqlCommand("CREATE TABLE "+Login+"Contacts (Contact VARCHAR(50));", cnct);
+                command = new MySqlCommand("CREATE TABLE "+Login+"Contacts (Contact VARCHAR(50),Unrecived INT);", cnct);
                 command.ExecuteNonQuery();
                 return true;
             }
@@ -46,25 +47,65 @@ namespace GloryToHoChiMin {
                 command = new MySqlCommand("SELECT Login FROM Accounts WHERE Login = '" + Login2 + "';", cnct);
                 if (command.ExecuteScalar() != null) {
                     if (String.Compare(Login1, Login2) > 0) {
-                        command = new MySqlCommand("CREATE TABLE Dialog" + Login1 + "And" + Login2 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500);", cnct);
+                        command = new MySqlCommand("CREATE TABLE Dialog" + Login1 + "And" + Login2 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO "+Login1+"Contacts (Contact) values('"+ Login2 + "');", cnct);
+                        command = new MySqlCommand("INSERT INTO "+Login1+ "Contacts (Contact,Unrecived) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact) values('" + Login1 + "');", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unrecived) values('" + Login1 + "',0);", cnct);
                         command.ExecuteNonQuery();
                     }
                     else {
-                        command = new MySqlCommand("CREATE TABLE Dialog" + Login2 + "And" + Login1 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500);", cnct);
+                        command = new MySqlCommand("CREATE TABLE Dialog" + Login2 + "And" + Login1 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login1 + "Contacts (Contact) values('" + Login2 + "');", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login1 + "Contacts (Contact,Unrecived) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
-                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact) values('" + Login1 + "');", cnct);
+                        command = new MySqlCommand("INSERT INTO " + Login2 + "Contacts (Contact,Unrecived) values('" + Login1 + "',0);", cnct);
                         command.ExecuteNonQuery();
                     }
                     return true;
                 }
             }
             return false;
+        }
+        public bool SendMessage(string from,string to,string messadge) {
+            MySqlCommand command;
+            if (String.Compare(from, to) > 0) 
+                command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+" (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+            else 
+                command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+            command.ExecuteNonQuery();
+            return true;
+        }
+        public Dialog GetDialog(string Login1, string Login2) {
+            MySqlCommand command;
+            Dialog dlg = new Dialog();
+            dlg.Login = new List<string>();
+            dlg.Message = new List<string>();
+            if (String.Compare(Login1, Login2) > 0)
+                command = new MySqlCommand("SELECT * FROM Dialog" + Login1 + "And" + Login2 + ";", cnct);
+            else
+                command = new MySqlCommand("SELECT * FROM Dialog" + Login2 + "And" + Login1 + ";", cnct);
+
+            using (MySqlDataReader r = command.ExecuteReader()) {
+                while (r.Read()) {
+                    dlg.Login.Add((string)r.GetValue(1));
+                    dlg.Message.Add((string)r.GetValue(2));
+                }
+            }
+            return dlg;
+        }
+        public DialogsList GetDialogsList(string Login) {
+            DialogsList dl = new DialogsList();
+            dl.Logins = new List<string>();
+            dl.Unrecived = new List<int>();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM " + Login  +"Contacts;", cnct);
+            using (MySqlDataReader r = command.ExecuteReader()) {
+                while (r.Read()) {
+                    dl.Logins.Add((string)r.GetValue(0));
+                    dl.Unrecived.Add((int)r.GetValue(1));
+                }
+            }
+            return dl;
         }
         public void Dispose(){
             cnct.Close();

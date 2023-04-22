@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GloryToHoChiMin.Jsonstructs {
+namespace Crsch_3.Jsonstructs {
     struct Reqtype {
       public  string RequestType { set; get; }
     }

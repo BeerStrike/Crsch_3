@@ -1,4 +1,4 @@
-﻿using GloryToHoChiMin.Jsonstructs;
+﻿using Crsch_3.Jsonstructs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,7 +51,7 @@ namespace GloryToHoChiMin {
                                         using (Stream output = ctxt.Response.OutputStream) {
                                             if (db.Register(ac.Login, ac.Password)) {
                                                 ctxt.Response.StatusCode = 200;
-                                                output.Write((Encoding.UTF8.GetBytes("Sucsefull")));
+                                                output.Write((Encoding.UTF8.GetBytes("OK")));
                                             }
                                             else {
                                                 ctxt.Response.StatusCode = 418;
@@ -67,7 +67,7 @@ namespace GloryToHoChiMin {
                                         using (Stream output = ctxt.Response.OutputStream) {
                                             if (db.Autorize(ac.Login, ac.Password)) {
                                                 ctxt.Response.StatusCode = 200;
-                                                output.Write((Encoding.UTF8.GetBytes("Sucsefull")));
+                                                output.Write((Encoding.UTF8.GetBytes("OK")));
                                             }
                                             else {
                                                 ctxt.Response.StatusCode = 418;
@@ -78,7 +78,80 @@ namespace GloryToHoChiMin {
                                         }
                                     }
                                     break;
-                                    
+                                    case "CreateDialog": {
+                                        Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
+                                        using (Stream output = ctxt.Response.OutputStream) {
+                                                if (db.Autorize(ac.Login, ac.Password)) {
+                                                    ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
+                                                    if (db.CreateNewChat(ac.Login, rc.LoginRcv)) {
+                                                        ctxt.Response.StatusCode = 200;
+                                                        output.Write(Encoding.UTF8.GetBytes("OK"));
+                                                     }else {
+                                                    ctxt.Response.StatusCode = 419;
+                                                    output.Write((Encoding.UTF8.GetBytes("Error")));
+                                                }
+                                                }
+                                                else {
+                                                    ctxt.Response.StatusCode = 418;
+                                                    output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case "SendMessage": {
+                                        Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
+                                        using (Stream output = ctxt.Response.OutputStream) {
+                                            if (db.Autorize(ac.Login, ac.Password)) {
+                                                ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
+                                                ChatMsg msg = JsonSerializer.Deserialize<ChatMsg>(jsonstr);
+                                                if (db.SendMessage(ac.Login, rc.LoginRcv, msg.Message)) {
+                                                    ctxt.Response.StatusCode = 200;
+                                                    output.Write(Encoding.UTF8.GetBytes("OK"));
+                                                }
+                                                else {
+                                                    ctxt.Response.StatusCode = 419;
+                                                    output.Write((Encoding.UTF8.GetBytes("Error")));
+                                                }
+                                            }
+                                            else {
+                                                ctxt.Response.StatusCode = 418;
+                                                output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                                            }
+                                        }
+                                    }
+                                    break;
+                                    case "GetDialog": {
+                                        Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
+                                        using (Stream output = ctxt.Response.OutputStream) {
+                                            if (db.Autorize(ac.Login, ac.Password)) {
+                                                ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
+                                                Dialog dlg = db.GetDialog(ac.Login, rc.LoginRcv);
+                                                ctxt.Response.StatusCode = 200;
+                                                output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dlg)));
+                                            }
+                                            else {
+                                                ctxt.Response.StatusCode = 418;
+                                                output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                                            }
+                                        }
+                                    }
+                                    break;
+                                    case "GetDialogsList": {
+                                        Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
+                                        using (Stream output = ctxt.Response.OutputStream) {
+                                            if (db.Autorize(ac.Login, ac.Password)) {
+                                                ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
+                                                DialogsList dlg = db.GetDialogsList(ac.Login);
+                                                ctxt.Response.StatusCode = 200;
+                                                output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dlg)));
+                                            }
+                                            else {
+                                                ctxt.Response.StatusCode = 418;
+                                                output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                                            }
+                                        }
+                                    }
+                                    break;
                                     default:
                                         ctxt.Response.StatusCode = 400;
                                         ctxt.Response.Close();
