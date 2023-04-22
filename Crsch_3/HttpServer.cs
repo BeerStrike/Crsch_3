@@ -37,8 +37,8 @@ namespace GloryToHoChiMin {
             while (true) {
                 try {
                     var ctxt = await srv.GetContextAsync();
-                    switch (ctxt.Request.Headers["Content-Type"]) {
-                     case "application/json": {
+                   // switch (ctxt.Request.Headers["Content-Type"]) {
+                   //  case "application/json": {
                         switch (ctxt.Request.HttpMethod) {
                                     case "POST": {
                                         try {
@@ -224,16 +224,16 @@ namespace GloryToHoChiMin {
                                           ctxt.Response.Close();
                                     break;
                                 }
-                        }break;
-                        case "multipart/form-data": {
-
-                        }break;
-                        default:
-                           Log("Ошибка в заголовке");
-                            ctxt.Response.StatusCode = 400;
-                            ctxt.Response.Close();
-                            break;
-                    }
+                        //}break;
+                    //    case "multipart/form-data": {
+                    //
+                     //   }break;
+                     //   default:
+                     //      Log("Ошибка в заголовке");
+                     //       ctxt.Response.StatusCode = 400;
+                     //       ctxt.Response.Close();
+                     //       break;
+                   // }
                 }catch(Exception e) {
                     Log("Ошибка: " + e.Message);
                 }
