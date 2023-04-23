@@ -21,7 +21,6 @@ namespace GloryToHoChiMin {
             udpSndr.EnableBroadcast = true;
             udpSndr.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
             udpEp = new IPEndPoint(IPAddress.Broadcast, 8889);
-            udpSndr.
             udpSndr.SendTo(Encoding.UTF8.GetBytes("111"), udpEp);
             srv.Prefixes.Add("http://*:" + port.ToString()+"/");
           db=new DatabaseConnector(dbadr, dbport, dbnme, dblogin, dbpass);
