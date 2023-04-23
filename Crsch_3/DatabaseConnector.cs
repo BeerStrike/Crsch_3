@@ -73,6 +73,7 @@ namespace GloryToHoChiMin {
                 command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+" (Login,Message) values('" + from + "','" + messadge + "');", cnct);
             else 
                 command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+            command = new MySqlCommand("UPDATE "+to + "Contacts SET Unread = Unread+1 WHERE Contact='"+from+"';",cnct);
             command.ExecuteNonQuery();
             return true;
         }
@@ -98,6 +99,8 @@ namespace GloryToHoChiMin {
             for (int i = dlg.Messages.Count - 1; i >= 0; i--)
                 rw.Add(dlg.Messages[i]);
             dlg.Messages = rw;
+            command = new MySqlCommand("UPDATE "+Login1+"Contacts SET Unread = 0 WHERE Contact='"+Login2+"';",cnct);
+            command.ExecuteNonQuery();
             return dlg;
         }
         public DialogsList GetDialogsList(string Login) {
