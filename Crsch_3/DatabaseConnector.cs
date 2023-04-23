@@ -94,6 +94,10 @@ namespace GloryToHoChiMin {
                     dlg.Messages.Add(msg);
                 }
             }
+          List<Message> rw = new List<Message>();
+            for (int i = dlg.Messages.Count - 1; i >= 0; i--)
+                rw.Add(dlg.Messages[i]);
+            dlg.Messages = rw;
             return dlg;
         }
         public DialogsList GetDialogsList(string Login) {
