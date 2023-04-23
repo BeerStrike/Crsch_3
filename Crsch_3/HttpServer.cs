@@ -16,7 +16,7 @@ namespace GloryToHoChiMin {
         public event Logs Log;
         IPEndPoint udpEp;
         public HttpServer(int udpPort,int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
-           srv= new HttpListener();
+            srv= new HttpListener();
             udpSndr =  new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpSndr.EnableBroadcast = true;
             udpSndr.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
@@ -117,9 +117,7 @@ namespace GloryToHoChiMin {
                                                             ChatMsg msg = JsonSerializer.Deserialize<ChatMsg>(jsonstr);
                                                             if (db.SendMessage(ac.Login, rc.LoginRcv, msg.Message)) {
                                                                 byte[] sndmsg = Encoding.UTF8.GetBytes(rc.LoginRcv);
-                                                             udpSndr.SendTo(Encoding.UTF8.GetBytes("111"), udpEp);
-
-                                                             ctxt.Response.StatusCode = 200;
+                                                                ctxt.Response.StatusCode = 200;
                                                                 output.Write(Encoding.UTF8.GetBytes("OK"));
                                                             }
                                                             else {

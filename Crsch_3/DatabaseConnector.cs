@@ -10,7 +10,7 @@ namespace GloryToHoChiMin {
         public delegate void Log(string s);
         public event Log ErrorLog;
         public DatabaseConnector(string host, int port, string database, string username, string password){ 
-         cnct = new MySqlConnection("Server=" + host + ";Database=" + database + ";port=" + port + ";User Id=" + username + ";password=" + password);
+         cnct = new MySqlConnection("Server=" + host + ";Database=" + database + ";port=" + port + ";User Id=" + username + ";password=" + password+";charset = utf8;");
         }
         public bool Start() {
             try {
