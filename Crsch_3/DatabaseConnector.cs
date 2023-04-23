@@ -73,6 +73,7 @@ namespace GloryToHoChiMin {
                 command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+" (Login,Message) values('" + from + "','" + messadge + "');", cnct);
             else 
                 command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+            command.ExecuteNonQuery();
             command = new MySqlCommand("UPDATE "+to + "Contacts SET Unread = Unread+1 WHERE Contact='"+from+"';",cnct);
             command.ExecuteNonQuery();
             return true;
