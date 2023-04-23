@@ -216,7 +216,7 @@ namespace GloryToHoChiMin {
                                             }
                                             break;
                                         }
-                                    }
+                                     }
                                     break;
                                     default:
                                         Log("Ошибка: полученный запрос имеет неправильный HTTP метод");

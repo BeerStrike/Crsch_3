@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Crsch_3.Jsonstructs {
-    struct Dialog {
-        public IList<Message> Messages { get; set; }
+    class Message {
+        public string Date { get; set; }
+        public string Login { get; set; }
+        public string MessageText { get; set; }
     }
 }

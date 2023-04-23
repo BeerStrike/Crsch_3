@@ -79,8 +79,7 @@ namespace GloryToHoChiMin {
         public Dialog GetDialog(string Login1, string Login2) {
             MySqlCommand command;
             Dialog dlg = new Dialog();
-            dlg.Login = new List<string>();
-            dlg.Message = new List<string>();
+            dlg.Messages = new List< Message>();
             if (String.Compare(Login1, Login2) > 0)
                 command = new MySqlCommand("SELECT * FROM Dialog" + Login1 + "And" + Login2 + ";", cnct);
             else
@@ -88,8 +87,11 @@ namespace GloryToHoChiMin {
 
             using (MySqlDataReader r = command.ExecuteReader()) {
                 while (r.Read()) {
-                    dlg.Login.Add((string)r.GetValue(1));
-                    dlg.Message.Add((string)r.GetValue(2));
+                    Message msg = new Message();
+                    msg.Login=(string)r.GetValue(1);
+                    msg.MessageText=(string)r.GetValue(2);
+                    msg.Date = "07.11.1917";
+                    dlg.Messages.Add(msg);
                 }
             }
             return dlg;
