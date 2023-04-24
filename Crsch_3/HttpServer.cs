@@ -15,11 +15,10 @@ namespace Crsch_3 {
         public delegate void Logs(string s);
         public event Logs Log;
         private WebSocketServer wsrw;
-        private WebSocket wbsct;
         private WbscktBehavior wbscktController;
         public HttpServer(int webSocketPort,int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
             srv= new HttpListener();
-            WebSocketServer wsrw=new WebSocketServer("ws://127.0.0.1:" + webSocketPort.ToString() + "/");
+            wsrw=new WebSocketServer("ws://192.168.0.11:" + webSocketPort.ToString() + "/");
             wbscktController = new WbscktBehavior();
             wsrw.AddWebSocketService<WbscktBehavior>("/",()=>wbscktController);
             wsrw.ReuseAddress = true;
