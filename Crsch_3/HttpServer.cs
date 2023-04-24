@@ -22,7 +22,6 @@ namespace Crsch_3 {
             wbscktController = new WbscktBehavior();
             wsrw.AddWebSocketService<WbscktBehavior>("/",()=>wbscktController);
             wsrw.ReuseAddress = true;
-            wsrw.Start();
             srv.Prefixes.Add("http://*:" + port.ToString()+"/");
           db=new DatabaseConnector(dbadr, dbport, dbnme, dblogin, dbpass);
             db.ErrorLog += DbLogReciver;
@@ -33,7 +32,9 @@ namespace Crsch_3 {
         public bool Start() {
             try {
                 srv.Start();
-            } catch(HttpListenerException e) {
+                wsrw.Start();
+            }
+            catch (Exception e) {
                 Log("Ошибка при запуске сервера: " + e.Message);
                 return false;
             }
