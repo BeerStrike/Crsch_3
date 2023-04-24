@@ -18,7 +18,7 @@ namespace Crsch_3 {
         private WbscktBehavior wbscktController;
         public HttpServer(int webSocketPort,int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
             srv= new HttpListener();
-            wsrw=new WebSocketServer("ws://195.19.114.66" + webSocketPort.ToString() + " / ");
+            wsrw=new WebSocketServer("ws://195.19.114.66:" + webSocketPort.ToString() + "/");
             wbscktController = new WbscktBehavior();
             wsrw.AddWebSocketService<WbscktBehavior>("/",()=>wbscktController);
             wsrw.ReuseAddress = true;
