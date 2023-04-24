@@ -8,7 +8,7 @@ namespace Crsch_3 {
             Console.WriteLine(s);
         }
         static void Main(string[] args) {
-            HttpServer srv = new HttpServer(8889,8888, "195.19.114.66", 3306, "Che", "root", "VivaLaRevolution");
+            HttpServer srv = new HttpServer(41638,8888, "195.19.114.66", 3306, "Che", "root", "VivaLaRevolution");
             srv.Log += Logger;
             if (srv.Start()) {
                 Console.WriteLine("Сервер запущен");
