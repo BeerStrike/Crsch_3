@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
-namespace GloryToHoChiMin {
+namespace Crsch_3 {
     class Program {
         static void Logger(string s){
             Console.WriteLine(s);

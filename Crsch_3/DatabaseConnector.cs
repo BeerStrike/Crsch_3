@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GloryToHoChiMin {
+namespace Crsch_3 {
     class DatabaseConnector : IDisposable {
         private MySqlConnection cnct;
         public delegate void Log(string s);

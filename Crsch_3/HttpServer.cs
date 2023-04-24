@@ -6,22 +6,24 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-
-namespace GloryToHoChiMin {
+using WebSocketSharp.Server;
+using WebSocketSharp;
+namespace Crsch_3 {
     class HttpServer:IDisposable{
         private HttpListener srv;
         private DatabaseConnector db;
-        Socket udpSndr;
         public delegate void Logs(string s);
         public event Logs Log;
-        IPEndPoint udpEp;
-        public HttpServer(int udpPort,int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
+        private WebSocketServer wsrw;
+        private WebSocket wbsct;
+        private WbscktBehavior wbscktController;
+        public HttpServer(int webSocketPort,int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
             srv= new HttpListener();
-            udpSndr =  new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            udpSndr.EnableBroadcast = true;
-            udpSndr.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
-            udpEp = new IPEndPoint(IPAddress.Broadcast, 8889);
-            udpSndr.SendTo(Encoding.UTF8.GetBytes("111"), udpEp);
+            WebSocketServer wsrw=new WebSocketServer("ws://127.0.0.1:" + webSocketPort.ToString() + "/");
+            wbscktController = new WbscktBehavior();
+            wsrw.AddWebSocketService<WbscktBehavior>("/",()=>wbscktController);
+            wsrw.ReuseAddress = true;
+            wsrw.Start();
             srv.Prefixes.Add("http://*:" + port.ToString()+"/");
           db=new DatabaseConnector(dbadr, dbport, dbnme, dblogin, dbpass);
             db.ErrorLog += DbLogReciver;
@@ -116,7 +118,7 @@ namespace GloryToHoChiMin {
                                                             ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
                                                             ChatMsg msg = JsonSerializer.Deserialize<ChatMsg>(jsonstr);
                                                             if (db.SendMessage(ac.Login, rc.LoginRcv, msg.Message)) {
-                                                                byte[] sndmsg = Encoding.UTF8.GetBytes(rc.LoginRcv);
+                                                                 wbscktController.BroadcastTo(rc.LoginRcv, msg.Message);
                                                                 ctxt.Response.StatusCode = 200;
                                                                 output.Write(Encoding.UTF8.GetBytes("OK"));
                                                             }
