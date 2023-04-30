@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebSocketSharp-NonPreRelease" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="MySql.Data">
       <HintPath>mysql-connector-net\net5.0\MySql.Data.dll</HintPath>
     </Reference>

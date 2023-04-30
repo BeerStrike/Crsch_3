@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Crsch_3 {
@@ -15,11 +16,16 @@ namespace Crsch_3 {
         public bool Start() {
             try {
                 cnct.Open();
+                cnct.StateChange += Reconnect;
             }catch(MySqlException e) {
                 ErrorLog(e.Message);
                 return false;
             }
             return true;
+        }
+
+        private void Reconnect(object sender, StateChangeEventArgs e) {
+            cnct.Open();
         }
         public bool Register(string Login,string Password) {
             MySqlCommand command = new MySqlCommand("SELECT Login FROM Accounts WHERE Login = '"+Login+"';", cnct);
