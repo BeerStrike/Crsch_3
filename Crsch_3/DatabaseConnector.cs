@@ -16,7 +16,7 @@ namespace Crsch_3 {
         public bool Start() {
             try {
                 cnct.Open();
-                cnct.StateChange += Reconnect;
+                //cnct.StateChange += Reconnect;
             }catch(MySqlException e) {
                 ErrorLog(e.Message);
                 return false;
@@ -24,9 +24,9 @@ namespace Crsch_3 {
             return true;
         }
 
-        private void Reconnect(object sender, StateChangeEventArgs e) {
-            cnct.Open();
-        }
+     //   private void Reconnect(object sender, StateChangeEventArgs e) {
+          //  cnct.Open();
+        //}
         public bool Register(string Login,string Password) {
             MySqlCommand command = new MySqlCommand("SELECT Login FROM Accounts WHERE Login = '"+Login+"';", cnct);
             if (command.ExecuteScalar() != null)
@@ -53,7 +53,7 @@ namespace Crsch_3 {
                 command = new MySqlCommand("SELECT Login FROM Accounts WHERE Login = '" + Login2 + "';", cnct);
                 if (command.ExecuteScalar() != null) {
                     if (String.Compare(Login1, Login2) > 0) {
-                        command = new MySqlCommand("CREATE TABLE Dialog" + Login1 + "And" + Login2 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
+                        command = new MySqlCommand("CREATE TABLE Dialog" + Login1 + "And" + Login2 + "(Date VARCHAR(20),Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
                         command = new MySqlCommand("INSERT INTO "+Login1+ "Contacts (Contact,Unread) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
@@ -61,7 +61,7 @@ namespace Crsch_3 {
                         command.ExecuteNonQuery();
                     }
                     else {
-                        command = new MySqlCommand("CREATE TABLE Dialog" + Login2 + "And" + Login1 + "(id INT AUTO_INCREMENT PRIMARY KEY,Login VARCHAR(50),Message Varchar(500));", cnct);
+                        command = new MySqlCommand("CREATE TABLE Dialog" + Login2 + "And" + Login1 + "(Date VARCHAR(20),Login VARCHAR(50),Message Varchar(500));", cnct);
                         command.ExecuteNonQuery();
                         command = new MySqlCommand("INSERT INTO " + Login1 + "Contacts (Contact,Unread) values('" + Login2 + "',0);", cnct);
                         command.ExecuteNonQuery();
@@ -76,9 +76,9 @@ namespace Crsch_3 {
         public bool SendMessage(string from,string to,string messadge) {
             MySqlCommand command;
             if (String.Compare(from, to) > 0) 
-                command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+" (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+                command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+ " (Date,Login,Message) values('" + DateTime.Now + "','" + from + "','" + messadge + "');", cnct);
             else 
-                command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Login,Message) values('" + from + "','" + messadge + "');", cnct);
+                command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Date,Login,Message) values('" + DateTime.Now + "','" + from + "','" + from + "','" + messadge + "');", cnct);
             command.ExecuteNonQuery();
             command = new MySqlCommand("UPDATE "+to + "Contacts SET Unread = Unread+1 WHERE Contact='"+from+"';",cnct);
             command.ExecuteNonQuery();
@@ -96,9 +96,9 @@ namespace Crsch_3 {
             using (MySqlDataReader r = command.ExecuteReader()) {
                 while (r.Read()) {
                     Message msg = new Message();
+                    msg.Date = (string)r.GetValue(0);
                     msg.Login=(string)r.GetValue(1);
                     msg.MessageText=(string)r.GetValue(2);
-                    msg.Date = "07.11.1917";
                     dlg.Messages.Add(msg);
                 }
             }
