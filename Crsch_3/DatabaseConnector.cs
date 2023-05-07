@@ -78,7 +78,7 @@ namespace Crsch_3 {
             if (String.Compare(from, to) > 0) 
                 command = new MySqlCommand("INSERT INTO Dialog" + from + "And"+to+ " (Date,Login,Message) values('" + DateTime.Now + "','" + from + "','" + messadge + "');", cnct);
             else 
-                command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Date,Login,Message) values('" + DateTime.Now + "','" + from + "','" + from + "','" + messadge + "');", cnct);
+                command = new MySqlCommand("INSERT INTO Dialog" + to + "And" + from + " (Date,Login,Message) values('" + DateTime.Now + "','" + from + "','" + messadge + "');", cnct);
             command.ExecuteNonQuery();
             command = new MySqlCommand("UPDATE "+to + "Contacts SET Unread = Unread+1 WHERE Contact='"+from+"';",cnct);
             command.ExecuteNonQuery();
