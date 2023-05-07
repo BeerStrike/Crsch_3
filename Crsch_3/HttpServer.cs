@@ -43,37 +43,40 @@ namespace Crsch_3 {
             while (true) {
                 try {
                     ctxt = await srv.GetContextAsync();
-                   // switch (ctxt.Request.Headers["Content-Type"]) {
-                   //  case "application/json": {
-                        switch (ctxt.Request.HttpMethod) {
-                                     case "POST": {
-                                         PostProcessor(ctxt);  
-                                    }
-                                    break;
-                                    case "GET": {
-                                        GetProcessor(ctxt);
-                                     }
-                                    break;
-                                    default:
-                                        Log("Ошибка: полученный запрос имеет неправильный HTTP метод");
-                                          ctxt.Response.StatusCode = 400;
-                                          ctxt.Response.Close();
-                                    break;
-                                }
-                        //}break;
+                    // switch (ctxt.Request.Headers["Content-Type"]) {
+                    //  case "application/json": {
+                    switch (ctxt.Request.HttpMethod) {
+                        case "POST": {
+                            PostProcessor(ctxt);
+                        }
+                        break;
+                        case "GET": {
+                            GetProcessor(ctxt);
+                        }
+                        break;
+                        default:
+                            Log("Ошибка: полученный запрос имеет неправильный HTTP метод");
+                            ctxt.Response.StatusCode = 400;
+                            ctxt.Response.Close();
+                            break;
+                    }
+                    //}break;
                     //    case "multipart/form-data": {
                     //
-                     //   }break;
+                    //   }break;
 
-                     //   default:
-                     //      Log("Ошибка в заголовке");
-                     //       ctxt.Response.StatusCode = 400;
-                     //       ctxt.Response.Close();
-                     //       break;
-                   // }
-                }catch(Exception e) {
+                    //   default:
+                    //      Log("Ошибка в заголовке");
+                    //       ctxt.Response.StatusCode = 400;
+                    //       ctxt.Response.Close();
+                    //       break;
+                    // }
+                }
+                catch (Exception e) {
+                    if (ctxt != null) { 
                     ctxt.Response.StatusCode = 400;
                     ctxt.Response.Close();
+                }
                     Log("Ошибка: " + e.Message);
                 }
             }
