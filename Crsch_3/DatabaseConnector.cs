@@ -35,6 +35,8 @@ namespace Crsch_3 {
             {
                 command = new MySqlCommand("INSERT INTO Accounts(Login, Password) values('" + Login + "', '" + Password + "');", cnct);
                 command.ExecuteNonQuery();
+                command = new MySqlCommand("INSERT INTO UsersInfo(Login, FstName,LstName) values('" + Login + "', '" + Login + "', '');", cnct);
+                command.ExecuteNonQuery();
                 command = new MySqlCommand("CREATE TABLE "+Login+"Contacts (Contact VARCHAR(50),Unread INT);", cnct);
                 command.ExecuteNonQuery();
                 return true;
@@ -46,6 +48,25 @@ namespace Crsch_3 {
                 return true;
             else
                 return false;
+        }
+        public bool UpdateUserInfo(string Login, string NewFstName,string NewLstName,string NewPass) {
+            MySqlCommand command = new MySqlCommand("UPDATE Accounts SET Password='"+NewPass+"' WHERE Login='"+Login+"';", cnct);
+            command.ExecuteNonQuery();
+            command = new MySqlCommand("UPDATE UsersInfo SET FstName='" + NewFstName + "' WHERE Login='" + Login + "';", cnct);
+            command.ExecuteNonQuery();
+            command = new MySqlCommand("UPDATE UsersInfo SET LstName='" + NewLstName + "' WHERE Login='" + Login + "';", cnct);
+            command.ExecuteNonQuery();
+            return true;
+        }
+        public UserInfo GetUserInfo(string Login) {
+            MySqlCommand command = new MySqlCommand("SELECT * FROM UsersInfo WHERE Login='"+Login+"';", cnct);
+            UserInfo inf = new UserInfo();
+            using (MySqlDataReader r = command.ExecuteReader()) {
+                r.Read();
+                inf.FirstName = r.GetString(1);
+                inf.LastName = r.GetString(2);
+            }
+            return inf;
         }
         public bool CreateNewChat(string Login1, string Login2) {
             MySqlCommand command = new MySqlCommand("SELECT Login FROM Accounts WHERE Login = '" + Login1 + "';", cnct);

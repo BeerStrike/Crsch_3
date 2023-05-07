@@ -197,6 +197,19 @@ namespace Crsch_3 {
                         }
                     }
                     break;
+                    case "UpdateUserInfo": {
+                        Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
+                        using (Stream output = ctxt.Response.OutputStream) {
+                            if (db.Autorize(ac.Login, ac.Password)) {
+                                NewUserInfo nw = JsonSerializer.Deserialize<NewUserInfo>(jsonstr);
+                                db.UpdateUserInfo(ac.Login,nw.NewFstName,nw.NewLstName,nw.NewPassword);
+                            }
+                            else {
+                                ctxt.Response.StatusCode = 418;
+                                output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                            }
+                        }
+                    }break;
                     default:
                         ctxt.Response.StatusCode = 400;
                         ctxt.Response.Close();
@@ -248,6 +261,15 @@ namespace Crsch_3 {
                     }
                 }
                 break;
+                case "UserInfo": {
+                    using (Stream output = ctxt.Response.OutputStream) {
+                        output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(db.GetUserInfo(ctxt.Request.QueryString["Login"]))));
+                        ctxt.Response.StatusCode = 200;
+                        output.Flush();
+                        ctxt.Response.Close();
+
+                    }
+                }break;
                 case "WebSocketConnect": {
               //     var wsctxt= await ctxt.AcceptWebSocketAsync(null);
                    //WebSocket s = wsctxt.WebSocket;
