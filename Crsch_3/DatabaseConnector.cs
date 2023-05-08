@@ -133,13 +133,24 @@ namespace Crsch_3 {
         }
         public DialogsList GetDialogsList(string Login) {
             DialogsList dl = new DialogsList();
-            dl.Logins = new List<string>();
-            dl.Unread = new List<int>();
+            dl.dlgs = new List<DialogListElm>();
             MySqlCommand command = new MySqlCommand("SELECT * FROM " + Login  +"Contacts;", cnct);
             using (MySqlDataReader r = command.ExecuteReader()) {
                 while (r.Read()) {
-                    dl.Logins.Add((string)r.GetValue(0));
-                    dl.Unread.Add((int)r.GetValue(1));
+                    DialogListElm elm = new DialogListElm();
+                    elm.Login=(string)r.GetValue(0);
+                    elm.Unread=(int)r.GetValue(1);
+                    dl.dlgs.Add(elm);
+                }
+            }
+            for(int i=0;i<dl.dlgs.Count; i++) {
+                command = new MySqlCommand("SELECT * FROM UsersInfo WHERE Login='" + dl.dlgs[i].Login + "';", cnct);
+                using (MySqlDataReader r = command.ExecuteReader()) {
+                    r.Read();
+                    DialogListElm elm = dl.dlgs[i];
+                    elm.FirstName = r.GetString(1);
+                    elm.LastName = r.GetString(2);
+                    dl.dlgs[i] = elm;
                 }
             }
             return dl;
