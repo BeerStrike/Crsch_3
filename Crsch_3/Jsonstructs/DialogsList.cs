@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Crsch_3.Jsonstructs {
     struct DialogsList {
-        public IList<DialogListElm> dlgs { get; set; }
+        public IList<DialogListElm> Dialogs { get; set; }
     }
 }
