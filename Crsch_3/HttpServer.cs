@@ -84,9 +84,9 @@ namespace Crsch_3 {
             int len = int.Parse(ctxt.Request.Headers["Content-Length"]);
             Stream rd = ctxt.Request.InputStream;
             byte[] buf = new byte[len];
-            ctxt.Request.InputStream.Read(buf, 0, len);
+            Log(ctxt.Request.InputStream.Read(buf, 0, len).ToString());
             string stringBuffer = Encoding.ASCII.GetString(buf);
-            Log(stringBuffer);
+       //     Log(stringBuffer);
             string[] splitString = stringBuffer.Split('\n');
             if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
                 ctxt.Response.StatusCode = 200;
