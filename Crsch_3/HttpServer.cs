@@ -43,11 +43,21 @@ namespace Crsch_3 {
             while (true) {
                 try {
                     ctxt = await srv.GetContextAsync();
-                    // switch (ctxt.Request.Headers["Content-Type"]) {
-                    //  case "application/json": {
                     switch (ctxt.Request.HttpMethod) {
                         case "POST": {
-                            PostProcessor(ctxt);
+                            string[] ctype = ctxt.Request.Headers["Content-Type"].Split(';');
+                            switch (ctype[0]) {
+                                case "application/json":
+                                    PostProcessor(ctxt);
+                                    break;
+                                case "multipart/form-data":
+                                    ImageLoadProcessor(ctxt);
+                                    break;
+                                default:
+                                    PostProcessor(ctxt);
+                                    break;
+
+                            }
                         }
                         break;
                         case "GET": {
@@ -60,17 +70,6 @@ namespace Crsch_3 {
                             ctxt.Response.Close();
                             break;
                     }
-                    //}break;
-                    //    case "multipart/form-data": {
-                    //
-                    //   }break;
-
-                    //   default:
-                    //      Log("Ошибка в заголовке");
-                    //       ctxt.Response.StatusCode = 400;
-                    //       ctxt.Response.Close();
-                    //       break;
-                    // }
                 }
                 catch (Exception e) {
                     if (ctxt != null) { 
@@ -80,6 +79,31 @@ namespace Crsch_3 {
                     Log("Ошибка: " + e.Message);
                 }
             }
+        }
+        private void ImageLoadProcessor(HttpListenerContext ctxt) {
+            int len = int.Parse(ctxt.Request.Headers["Content-Length"]);
+            Stream rd = ctxt.Request.InputStream;
+            byte[] buf = new byte[len];
+            ctxt.Request.InputStream.Read(buf, 0, len);
+            string stringBuffer = Encoding.ASCII.GetString(buf);
+            string[] splitString = stringBuffer.Split('\n');
+            if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
+                ctxt.Response.StatusCode = 200;
+               int pl = splitString[0].Length + splitString[1].Length + splitString[2].Length + splitString[3].Length + splitString[4].Length + splitString[5].Length
+                + splitString[6].Length + splitString[7].Length + splitString[8].Length + splitString[9].Length + splitString[10].Length + splitString[11].Length + 12;
+                byte[] buf2 = new byte[len - pl];
+                Array.Copy(buf, pl, buf2, 0, len - pl);
+                using (Stream wr = File.OpenWrite("Avatars/" + (splitString[3].Split('\r'))[0] + ".png")) {
+                    wr.Write(buf2);
+                }
+            }
+            else {
+                using (Stream output = ctxt.Response.OutputStream) {
+                    ctxt.Response.StatusCode = 418;
+                    output.Write((Encoding.UTF8.GetBytes("Login and password do not match")));
+                }
+            }
+            ctxt.Response.Close();
         }
         private void PostProcessor(HttpListenerContext ctxt) {
             try {
