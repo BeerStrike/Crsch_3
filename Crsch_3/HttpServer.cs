@@ -83,18 +83,14 @@ namespace Crsch_3 {
         private void ImageLoadProcessor(HttpListenerContext ctxt) {
             int len = int.Parse(ctxt.Request.Headers["Content-Length"]);
             Stream rd = ctxt.Request.InputStream;
-            byte[] buf = new byte[len];
-            int l = ctxt.Request.InputStream.Read(buf, 0, len);
-            Log(l.ToString());
-
-             l = ctxt.Request.InputStream.Read(buf, 0, len);
-            Log(l.ToString());
-
-             l = ctxt.Request.InputStream.Read(buf, 0, len);
-            Log(l.ToString());
-
+            byte[] buf = new byte[len+256];
+            int p= 0;
+            int r = 1;
+            while (r>0) {
+               r= rd.Read(buf, p, 256);
+               p += r;
+            }
             string stringBuffer = Encoding.ASCII.GetString(buf);
-           // Log(stringBuffer);
             string[] splitString = stringBuffer.Split('\n');
             if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
                int pl = splitString[0].Length + splitString[1].Length + splitString[2].Length + splitString[3].Length + splitString[4].Length + splitString[5].Length
