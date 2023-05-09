@@ -85,6 +85,7 @@ namespace Crsch_3 {
             Stream rd = ctxt.Request.InputStream;
             byte[] buf = new byte[len];
             ctxt.Request.InputStream.Read(buf, 0, len);
+            Log(len.ToString());
             string stringBuffer = Encoding.ASCII.GetString(buf);
             string[] splitString = stringBuffer.Split('\n');
             if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
