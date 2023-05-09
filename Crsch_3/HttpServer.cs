@@ -85,7 +85,6 @@ namespace Crsch_3 {
             Stream rd = ctxt.Request.InputStream;
             byte[] buf = new byte[len];
             ctxt.Request.InputStream.Read(buf, 0, len);
-            //Log(len.ToString());
             string stringBuffer = Encoding.ASCII.GetString(buf);
             string[] splitString = stringBuffer.Split('\n');
             if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
@@ -96,6 +95,7 @@ namespace Crsch_3 {
                 Array.Copy(buf, pl, buf2, 0, len - pl);
                 using (Stream wr = File.OpenWrite("Avatars/" + (splitString[3].Split('\r'))[0] + ".png")) {
                     wr.Write(buf2);
+                    Log(Encoding.ASCII.GetString(buf2));
                 }
             }
             else {
