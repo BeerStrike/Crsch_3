@@ -89,7 +89,6 @@ namespace Crsch_3 {
        //     Log(stringBuffer);
             string[] splitString = stringBuffer.Split('\n');
             if (db.Autorize((splitString[3].Split('\r'))[0], (splitString[7].Split('\r'))[0])) {
-                ctxt.Response.StatusCode = 200;
                int pl = splitString[0].Length + splitString[1].Length + splitString[2].Length + splitString[3].Length + splitString[4].Length + splitString[5].Length
                 + splitString[6].Length + splitString[7].Length + splitString[8].Length + splitString[9].Length + splitString[10].Length + splitString[11].Length + 12;
                 byte[] buf2 = new byte[len - pl];
@@ -97,6 +96,7 @@ namespace Crsch_3 {
                 using (Stream wr = File.OpenWrite("Avatars/" + (splitString[3].Split('\r'))[0] + ".png")) {
                     wr.Write(buf2);
                 }
+                ctxt.Response.StatusCode = 200;
             }
             else {
                 using (Stream output = ctxt.Response.OutputStream) {
