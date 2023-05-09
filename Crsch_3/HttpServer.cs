@@ -252,7 +252,7 @@ namespace Crsch_3 {
                 ctxt.Response.Close();
             }
         }
-        private async void GetProcessor(HttpListenerContext ctxt) {
+        private void GetProcessor(HttpListenerContext ctxt) {
              switch (ctxt.Request.QueryString["RequestData"]) {
                 case "Avatar": {
                     if (File.Exists("Avatars/" + ctxt.Request.QueryString["Login"] + ".png")) {
