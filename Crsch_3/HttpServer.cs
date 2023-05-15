@@ -69,9 +69,12 @@ namespace Crsch_3 {
                     }
                 }
                 catch (Exception e) {
-                    if (ctxt != null) { 
-                    ctxt.Response.StatusCode = 400;
-                    ctxt.Response.Close();
+                    try {
+                        ctxt.Response.StatusCode = 400;
+                        ctxt.Response.Close();
+                    }catch (ObjectDisposedException ex) {
+
+                    }
                 }
                     Log("Ошибка: " + e.Message);
                 }
