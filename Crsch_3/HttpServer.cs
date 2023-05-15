@@ -14,10 +14,8 @@ namespace Crsch_3 {
         private DatabaseConnector db;
         public delegate void Logs(string s);
         public event Logs Log;
-    //    WebSocketServer ws;
         public HttpServer(int port,string dbadr,int dbport,string dbnme,string dblogin,string dbpass)   {
             srv= new HttpListener();
-         //   ws = new WebSocketServer();
             srv.Prefixes.Add("http://*:" + port.ToString()+"/");
             db=new DatabaseConnector(dbadr, dbport, dbnme, dblogin, dbpass);
             db.ErrorLog += DbLogReciver;
@@ -178,7 +176,6 @@ namespace Crsch_3 {
                                 ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
                                 ChatMsg msg = JsonSerializer.Deserialize<ChatMsg>(jsonstr);
                                 if (db.SendMessage(ac.Login, rc.LoginRcv, msg.Message)) {
-                                //    ws.sendMessageTo(rc.LoginRcv, msg.Message);
                                     ctxt.Response.StatusCode = 200;
                                     output.Write(Encoding.UTF8.GetBytes("OK"));
                                 }
@@ -299,11 +296,15 @@ namespace Crsch_3 {
 
                     }
                 }break;
-                case "WebSocketConnect": {
-              //     var wsctxt= await ctxt.AcceptWebSocketAsync(null);
-                   //WebSocket s = wsctxt.WebSocket;
-                   // ws.addLisener(ctxt.Request.QueryString["Login"], s);
-                }break;
+                case "SearchUser": {
+                    using (Stream output = ctxt.Response.OutputStream) {
+                        output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(db.FindUser(ctxt.Request.QueryString["Querry"]))));
+                        ctxt.Response.StatusCode = 200;
+                        output.Flush();
+                        ctxt.Response.Close();
+                    }
+                }
+                break;
                 default: {
                     using (Stream output = ctxt.Response.OutputStream) {
                         output.Write((Encoding.UTF8.GetBytes("2323")));
