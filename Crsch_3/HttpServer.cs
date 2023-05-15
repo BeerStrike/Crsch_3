@@ -72,10 +72,8 @@ namespace Crsch_3 {
                     try {
                         ctxt.Response.StatusCode = 400;
                         ctxt.Response.Close();
-                    }catch (ObjectDisposedException ex) {
-
                     }
-                }
+                    catch (ObjectDisposedException ex) { }
                     Log("Ошибка: " + e.Message);
                 }
             }
