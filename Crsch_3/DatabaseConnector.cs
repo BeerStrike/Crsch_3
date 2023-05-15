@@ -159,23 +159,25 @@ namespace Crsch_3 {
             MySqlCommand command = new MySqlCommand("SELECT * FROM UsersInfo WHERE FstName LIKE '"+q+"%';", cnct);
             SearchedList srch = new SearchedList();
             srch.Searched = new List<User>();
-            using (MySqlDataReader r = command.ExecuteReader()) {
-                while (r.Read()) {
-                    User elm = new User();
-                    elm.Login = (string)r.GetValue(0);
-                    elm.FirstName = (string)r.GetValue(1);
-                    elm.LastName = (string)r.GetValue(1);
-                    srch.Searched.Add(elm);
+            if (q.Length >= 2) {
+                using (MySqlDataReader r = command.ExecuteReader()) {
+                    while (r.Read()) {
+                        User elm = new User();
+                        elm.Login = (string)r.GetValue(0);
+                        elm.FirstName = (string)r.GetValue(1);
+                        elm.LastName = (string)r.GetValue(2);
+                        srch.Searched.Add(elm);
+                    }
                 }
-            }
-            command = new MySqlCommand("SELECT * FROM UsersInfo WHERE LstName LIKE '" + q + "%';", cnct);
-            using (MySqlDataReader r = command.ExecuteReader()) {
-                while (r.Read()) {
-                    User elm = new User();
-                    elm.Login = (string)r.GetValue(0);
-                    elm.FirstName = (string)r.GetValue(1);
-                    elm.LastName = (string)r.GetValue(1);
-                    srch.Searched.Add(elm);
+                command = new MySqlCommand("SELECT * FROM UsersInfo WHERE LstName LIKE '" + q + "%';", cnct);
+                using (MySqlDataReader r = command.ExecuteReader()) {
+                    while (r.Read()) {
+                        User elm = new User();
+                        elm.Login = (string)r.GetValue(0);
+                        elm.FirstName = (string)r.GetValue(1);
+                        elm.LastName = (string)r.GetValue(2);
+                        srch.Searched.Add(elm);
+                    }
                 }
             }
             return srch;
