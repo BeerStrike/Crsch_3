@@ -252,7 +252,7 @@ namespace Crsch_3 {
         private void GetProcessor(HttpListenerContext ctxt) {
              switch (ctxt.Request.QueryString["RequestData"]) {
                 case "Avatar": {
-                    if (File.Exists("Avatars/" + ctxt.Request.QueryString["Login"] + ".png")) {
+                    if (File.Exists("Avatars/" + ctxt.Request.QueryString["Login"].ToLower() + ".png")) {
                         using (var stream = File.Open("Avatars/" + ctxt.Request.QueryString["Login"].ToLower() + ".png", FileMode.Open)) {
                             using (Stream output = ctxt.Response.OutputStream) {
                                 long i = 0;
