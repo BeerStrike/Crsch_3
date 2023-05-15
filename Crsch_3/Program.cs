@@ -16,21 +16,21 @@ namespace Crsch_3 {
                     string dbname = rd.ReadLine();
                     string dblgn = rd.ReadLine();
                     string dbpass = rd.ReadLine();
-                    HttpServer srv;
                     while (true) {
                         try {
-                            srv = new HttpServer(port, dbip, dbport, dbname, dblgn, dbpass);
-                            srv.Log += Logger;
-                            if (srv.Start()) {
-                                Console.WriteLine("Сервер запущен");
-                                while (true) {
-                                    string command = Console.ReadLine();
-                                    if (command == "stop") {
-                                        srv.Log -= Logger;
-                                        srv.Dispose();
-                                        break;
+                            using (HttpServer srv = new HttpServer(port, dbip, dbport, dbname, dblgn, dbpass)) {
+                                srv.Log += Logger;
+                                if (srv.Start()) {
+                                    Console.WriteLine("Сервер запущен");
+                                    while (true) {
+                                        string command = Console.ReadLine();
+                                        if (command == "stop") {
+                                            srv.Log -= Logger;
+                                            srv.Dispose();
+                                            break;
+                                        }
+                                        else Console.WriteLine("Неверная комманда");
                                     }
-                                    else Console.WriteLine("Неверная комманда");
                                 }
                             }
                         }
