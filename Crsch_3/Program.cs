@@ -34,6 +34,10 @@ namespace Crsch_3 {
                                 }
                             }
                         }
+                        catch (ObjectDisposedException e) {
+                            Console.WriteLine("Критическая ошибка: " + e.Message);
+                            Console.WriteLine("Сервер перезапускается");
+                        }
                         catch (Exception e) {
                             Console.WriteLine("Критическая ошибка: " + e.Message);
                             Console.WriteLine("Сервер перезапускается");

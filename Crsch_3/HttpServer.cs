@@ -118,7 +118,7 @@ namespace Crsch_3 {
                     case "Registration": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Register(ac.Login, ac.Password)) {
+                            if (db.Register(ac.Login.ToLower(), ac.Password)) {
                                 ctxt.Response.StatusCode = 200;
                                 output.Write((Encoding.UTF8.GetBytes("OK")));
                             }
@@ -134,7 +134,7 @@ namespace Crsch_3 {
                     case "Autorization": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 ctxt.Response.StatusCode = 200;
                                 output.Write((Encoding.UTF8.GetBytes("OK")));
                             }
@@ -150,9 +150,9 @@ namespace Crsch_3 {
                     case "CreateDialog": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
-                                if (db.CreateNewChat(ac.Login, rc.LoginRcv)) {
+                                if (db.CreateNewChat(ac.Login.ToLower(), rc.LoginRcv)) {
                                     ctxt.Response.StatusCode = 200;
                                     output.Write(Encoding.UTF8.GetBytes("OK"));
                                 }
@@ -171,10 +171,10 @@ namespace Crsch_3 {
                     case "SendMessage": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
                                 ChatMsg msg = JsonSerializer.Deserialize<ChatMsg>(jsonstr);
-                                if (db.SendMessage(ac.Login, rc.LoginRcv, msg.Message)) {
+                                if (db.SendMessage(ac.Login.ToLower(), rc.LoginRcv, msg.Message)) {
                                     ctxt.Response.StatusCode = 200;
                                     output.Write(Encoding.UTF8.GetBytes("OK"));
                                 }
@@ -193,9 +193,9 @@ namespace Crsch_3 {
                     case "GetDialog": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
-                                Dialog dlg = db.GetDialog(ac.Login, rc.LoginRcv);
+                                Dialog dlg = db.GetDialog(ac.Login.ToLower(), rc.LoginRcv);
                                 ctxt.Response.StatusCode = 200;
                                 output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dlg)));
                             }
@@ -209,9 +209,9 @@ namespace Crsch_3 {
                     case "GetDialogsList": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 ReciveUser rc = JsonSerializer.Deserialize<ReciveUser>(jsonstr);
-                                DialogsList dlg = db.GetDialogsList(ac.Login);
+                                DialogsList dlg = db.GetDialogsList(ac.Login.ToLower());
                                 ctxt.Response.StatusCode = 200;
                                 output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dlg)));
                             }
@@ -225,9 +225,9 @@ namespace Crsch_3 {
                     case "UpdateUserInfo": {
                         Acount ac = JsonSerializer.Deserialize<Acount>(jsonstr);
                         using (Stream output = ctxt.Response.OutputStream) {
-                            if (db.Autorize(ac.Login, ac.Password)) {
+                            if (db.Autorize(ac.Login.ToLower(), ac.Password)) {
                                 NewUserInfo nw = JsonSerializer.Deserialize<NewUserInfo>(jsonstr);
-                                db.UpdateUserInfo(ac.Login,nw.NewFstName,nw.NewLstName,nw.NewPassword);
+                                db.UpdateUserInfo(ac.Login.ToLower(),nw.NewFstName,nw.NewLstName,nw.NewPassword);
                             }
                             else {
                                 ctxt.Response.StatusCode = 418;
