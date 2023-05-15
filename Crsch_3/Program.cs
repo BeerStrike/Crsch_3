@@ -9,25 +9,34 @@ namespace Crsch_3 {
         }
         static void Main(string[] args) {
             if (File.Exists("configuration.conf")) {
-                using (StreamReader rd=File.OpenText("configuration.conf")) {
+                using (StreamReader rd = File.OpenText("configuration.conf")) {
                     int port = Int32.Parse(rd.ReadLine());
                     string dbip = rd.ReadLine();
                     int dbport = Int32.Parse(rd.ReadLine());
                     string dbname = rd.ReadLine();
                     string dblgn = rd.ReadLine();
                     string dbpass = rd.ReadLine();
-                    HttpServer srv = new HttpServer(port,dbip ,dbport, dbname, dblgn,dbpass);
-                    srv.Log += Logger;
-                    if (srv.Start()) {
-                        Console.WriteLine("Сервер запущен");
-                        while (true) {
-                            string command = Console.ReadLine();
-                            if (command == "stop") {
-                                srv.Log -= Logger;
-                                srv.Dispose();
-                                break;
+                    HttpServer srv;
+                    while (true) {
+                        try {
+                            srv = new HttpServer(port, dbip, dbport, dbname, dblgn, dbpass);
+                            srv.Log += Logger;
+                            if (srv.Start()) {
+                                Console.WriteLine("Сервер запущен");
+                                while (true) {
+                                    string command = Console.ReadLine();
+                                    if (command == "stop") {
+                                        srv.Log -= Logger;
+                                        srv.Dispose();
+                                        break;
+                                    }
+                                    else Console.WriteLine("Неверная комманда");
+                                }
                             }
-                            else Console.WriteLine("Неверная комманда");
+                        }
+                        catch (Exception e) {
+                            Console.WriteLine("Критическая ошибка: " + e.Message);
+                            Console.WriteLine("Сервер перезапускается");
                         }
                     }
                 }
