@@ -252,7 +252,7 @@ namespace Crsch_3 {
              switch (ctxt.Request.QueryString["RequestData"]) {
                 case "Avatar": {
                     if (File.Exists("Avatars/" + ctxt.Request.QueryString["Login"] + ".png")) {
-                        using (var stream = File.Open("Avatars/" + ctxt.Request.QueryString["Login"] + ".png", FileMode.Open)) {
+                        using (var stream = File.Open("Avatars/" + ctxt.Request.QueryString["Login"].ToLower() + ".png", FileMode.Open)) {
                             using (Stream output = ctxt.Response.OutputStream) {
                                 long i = 0;
                                 byte[] buf = new byte[256];
@@ -288,7 +288,7 @@ namespace Crsch_3 {
                 break;
                 case "UserInfo": {
                     using (Stream output = ctxt.Response.OutputStream) {
-                        output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(db.GetUserInfo(ctxt.Request.QueryString["Login"]))));
+                        output.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(db.GetUserInfo(ctxt.Request.QueryString["Login"].ToLower()))));
                         ctxt.Response.StatusCode = 200;
                         output.Flush();
                         ctxt.Response.Close();
