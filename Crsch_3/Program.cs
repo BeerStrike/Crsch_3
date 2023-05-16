@@ -17,31 +17,22 @@ namespace Crsch_3 {
                     string dblgn = rd.ReadLine();
                     string dbpass = rd.ReadLine();
                     while (true) {
-                        try {
-                            using (HttpServer srv = new HttpServer(port, dbip, dbport, dbname, dblgn, dbpass)) {
-                                srv.Log += Logger;
-                                if (srv.Start()) {
-                                    Console.WriteLine("Сервер запущен");
-                                    while (true) {
-                                        string command = Console.ReadLine();
-                                        if (command == "stop") {
-                                            srv.Log -= Logger;
-                                            srv.Dispose();
-                                            break;
-                                        }
-                                        else Console.WriteLine("Неверная комманда");
+                        using (HttpServer srv = new HttpServer(port, dbip, dbport, dbname, dblgn, dbpass)) {
+                            srv.Log += Logger;
+                            if (srv.Start()) {
+                                Console.WriteLine("Сервер запущен");
+                                while (true) {
+                                    string command = Console.ReadLine();
+                                    if (command == "stop") {
+                                        srv.Log -= Logger;
+                                        srv.Dispose();
+                                        break;
                                     }
+                                    else Console.WriteLine("Неверная комманда");
                                 }
                             }
                         }
-                        catch (ObjectDisposedException e) {
-                            Console.WriteLine("Критическая ошибка: " + e.Message);
-                            Console.WriteLine("Сервер перезапускается");
-                        }
-                        catch (Exception e) {
-                            Console.WriteLine("Критическая ошибка: " + e.Message);
-                            Console.WriteLine("Сервер перезапускается");
-                        }
+
                     }
                 }
             }
